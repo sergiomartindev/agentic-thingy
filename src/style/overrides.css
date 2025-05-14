@@ -1,0 +1,6 @@
+:root {
+    --md-menu-container-color: var(--color-white);
+    --md-menu-container-shape: var(--border-radius-medium);
+    --md-menu-item-container-color: blue;
+    --md-menu-item-selected-container-color: yellow;
+}

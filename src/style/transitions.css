@@ -1,0 +1,13 @@
+:root {
+    --background-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-message-enter-active,
+.chat-message-leave-active {
+    transition: all 0.5s ease;
+}
+.chat-message-enter-from,
+.chat-message-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}

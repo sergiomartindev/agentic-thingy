@@ -1,0 +1,16 @@
+@import './reset.css';
+@import './variables.css';
+@import './typography.css';
+@import './transitions.css';
+@import './overrides.css';
+
+body {
+    font-family: var(--font-sans);
+    font-size: var(--font-size);
+    color: var(--font-color);
+    overflow: hidden;
+}
+
+* {
+    scrollbar-color: var(--color-dark-blue) transparent;
+}
