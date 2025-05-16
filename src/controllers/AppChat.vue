@@ -173,9 +173,6 @@ function handleDataCardClick() {
                                                                                     agentType: AgentType.Orchestration,
                                                                                     own: false,
                                                                                 });
-
-                                                                                agentTyping.value =
-                                                                                    AgentType.Orchestration;
                                                                             }, 1800);
                                                                         }, 300);
                                                                     }, 1200);
