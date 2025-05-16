@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import AgentType from '../enums/AgentType.enum';
 import AppIconBubble from '../components/AppIconBubble.vue';
+import AppFileCard from '../components/AppFileCard.vue';
+import AppLinkCard from '../components/AppLinkCard.vue';
 import AppIcon from '../components/AppIcon.vue';
-import Icon from '../enums/Icon.enum';
-import AgentBackgroundColor from '../enums/AgentBackgroundColor.enum';
-import AgentColor from '../enums/AgentColor.enum';
 import useAgentHook from '../hooks/agent.hook';
+import type File from '../types/File.type';
+import type Link from '../types/Link.type';
 
 const props = defineProps<{
     own: boolean;
     agentType?: AgentType;
     content: string;
+    files?: File[];
+    links?: Link[];
 }>();
 
-const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName } = useAgentHook(props.agentType);
+const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentBackgroundColor } = useAgentHook(
+    props.agentType ?? null
+);
 </script>
 
 <template>
@@ -28,18 +33,44 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName } = useAg
                 </app-icon-bubble>
             </div>
         </div>
+
         <div class="app-chat-message__message-body">
             <span class="app-chat-message__nickname app-text">{{ agentName }}</span>
 
             <div
                 class="app-chat-message__message-content"
                 :class="{ 'app-chat-message__message-content--own': props.own }"
+                :style="{ 'background-color': agentBackgroundColor ?? '' }"
             >
-                <span class="app-text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt assumenda quibusdam laudantium
-                    itaque molestiae tenetur voluptates quas necessitatibus saepe, explicabo nam nobis ad. Sapiente aut
-                    exercitationem porro, eligendi nihil labore.
-                </span>
+                <div class="app-chat-message__message-text app-text">
+                    {{ props.content }}
+                </div>
+            </div>
+
+            <div
+                class="app-chat-message__files-cnt"
+                v-if="props.files?.length"
+            >
+                <div
+                    class="app-chat-message__file"
+                    v-for="file in props.files"
+                    :key="file.id"
+                >
+                    <app-file-card :title="file.title" />
+                </div>
+            </div>
+
+            <div
+                class="app-chat-message__links-cnt"
+                v-if="props.links?.length"
+            >
+                <div
+                    class="app-chat-message__link"
+                    v-for="link in props.links"
+                    :key="link.id"
+                >
+                    <app-link-card :title="link.title" />
+                </div>
             </div>
         </div>
     </div>
@@ -47,8 +78,6 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName } = useAg
 
 <style scoped lang="scss">
 .app-chat-message {
-    --chat-body-padding-top: 14px;
-
     display: flex;
     column-gap: var(--gap-large);
 
@@ -62,7 +91,7 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName } = useAg
         display: flex;
         flex-direction: column;
         row-gap: var(--padding-small);
-        padding-top: var(--chat-body-padding-top);
+        // padding-top: var(--chat-body-padding-top);
     }
 
     &__message-content {
@@ -72,8 +101,17 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName } = useAg
         border-radius: 0px var(--border-radius-large) var(--border-radius-large) var(--border-radius-large);
 
         &--own {
-            background-color: transparent;
+            background-color: var(--color-light-blue);
+            border-radius: var(--border-radius-large) 0px var(--border-radius-large) var(--border-radius-large);
         }
+    }
+
+    &__files-cnt,
+    &__links-cnt {
+        display: flex;
+        gap: var(--gap-large);
+
+        padding-top: var(--padding-medium);
     }
 }
 </style>

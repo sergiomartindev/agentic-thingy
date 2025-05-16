@@ -9,13 +9,15 @@ const props = defineProps<{
     agentType: AgentType;
 }>();
 
-const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentDescription } = useAgentHook(
-    props.agentType
-);
+const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentDescription, agentBackgroundColor } =
+    useAgentHook(props.agentType);
 </script>
 
 <template>
-    <div class="app-agent-card">
+    <div
+        class="app-agent-card"
+        :style="{ 'background-color': agentBackgroundColor }"
+    >
         <div class="app-agent-card__icon">
             <app-icon-bubble :style="{ 'background-color': agentIconBackgroundColor }">
                 <app-icon :style="{ color: agentIconColor }">{{ agentIcon }}</app-icon>
@@ -23,7 +25,7 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentDes
         </div>
         <div class="app-agent-card__info">
             <span class="app-agent-card__name app-text app-text--highlighted">{{ agentName }}</span>
-            <div class="app-agent-card__description app-light-text">{{ agentDescription }}</div>
+            <div class="app-agent-card__description app-text--light">{{ agentDescription }}</div>
         </div>
     </div>
 </template>
@@ -48,6 +50,10 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentDes
         display: flex;
         flex-direction: column;
         row-gap: var(--gap-medium);
+    }
+
+    &__description {
+        color: var(--font-color-grey);
     }
 }
 </style>

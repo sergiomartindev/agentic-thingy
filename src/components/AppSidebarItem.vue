@@ -37,5 +37,16 @@ const props = defineProps<{
     &:hover {
         background-color: var(--color-dark-blue);
     }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__icon,
+    &__label {
+        color: var(--font-color-grey);
+    }
 }
 </style>

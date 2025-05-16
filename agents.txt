@@ -1,5 +1,5 @@
 
-        <!-- <app-icon-bubble :style="{ 'background-color': AgentBackgroundColor.DataGuru }">
+        <!-- <app-icon-bubble :style="{ 'background-color': AgentIconBackgroundColor.DataGuru }">
             <app-icon
                 size="small"
                 :style="{ color: AgentColor.DataGuru }"
@@ -8,14 +8,14 @@
             </app-icon>
         </app-icon-bubble>
 
-        <app-icon-bubble :style="{ 'background-color': AgentBackgroundColor.ModellingChampion }">
+        <app-icon-bubble :style="{ 'background-color': AgentIconBackgroundColor.ModellingChampion }">
             <app-icon :style="{ color: AgentColor.ModellingChampion }">{{ Icon.ModellingChampion }}</app-icon>
         </app-icon-bubble>
 
-        <app-icon-bubble :style="{ 'background-color': AgentBackgroundColor.ReportingWizard }">
+        <app-icon-bubble :style="{ 'background-color': AgentIconBackgroundColor.ReportingWizard }">
             <app-icon :style="{ color: AgentColor.ReportingWizard }">{{ Icon.ReportingWizard }}</app-icon>
         </app-icon-bubble>
 
-        <app-icon-bubble :style="{ 'background-color': AgentBackgroundColor.Orchestration }">
+        <app-icon-bubble :style="{ 'background-color': AgentIconBackgroundColor.Orchestration }">
             <app-icon :style="{ color: AgentColor.Orchestration }">{{ Icon.Orchestration }}</app-icon>
         </app-icon-bubble> -->

@@ -34,5 +34,9 @@ const props = defineProps<{
     &:hover {
         background-color: var(--color-dark-blue);
     }
+
+    &__label {
+        color: var(--font-color-grey);
+    }
 }
 </style>

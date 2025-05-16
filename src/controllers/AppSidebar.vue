@@ -58,7 +58,7 @@ import jllLogo from '../assets/images/logo.svg';
         max-width: 70px;
     }
 
-    & &__valuations {
+    &__valuations {
         flex: 1;
 
         display: flex;

@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-    clickable: boolean;
+    clickable?: boolean;
 }>();
 
 const emit = defineEmits(['click']);

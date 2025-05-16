@@ -37,7 +37,7 @@ function handleDataCardClick() {
         </div>
         <div class="app-data-card__info">
             <span class="app-data-card__name app-text app-text--highlighted">{{ props.title }}</span>
-            <div class="app-data-card__description app-light-text">{{ props.description }}</div>
+            <div class="app-data-card__description app-text--light">{{ props.description }}</div>
         </div>
     </div>
 </template>
@@ -72,6 +72,10 @@ function handleDataCardClick() {
         display: flex;
         flex-direction: column;
         row-gap: var(--gap-medium);
+    }
+
+    &__description {
+        color: var(--font-color-grey);
     }
 }
 </style>

@@ -6,56 +6,156 @@ import AppInput from '../components/AppInput.vue';
 import Icon from '../enums/Icon.enum';
 import AppChatMessage from '../components/AppChatMessage.vue';
 import AppDataCard from '../components/AppDataCard.vue';
-import { ref } from 'vue';
+import { ref, Ref, useTemplateRef } from 'vue';
+import Message from '../types/Message.type';
+import File from '../types/File.type';
 
-const hasSelectedDataSource: ref<boolean> = ref(false);
-const messages: ref<Message[]> = ref([]);
+const hasSelectedDataSource: Ref<boolean> = ref(false);
+const messages: Ref<Message[]> = ref([]);
+const conversationCnt = useTemplateRef('conversation-cnt');
 
-type Message = {
-    id: string;
-    content: string;
-    agentType?: AgentType;
-    own: boolean;
-};
+function addMessage(message: Message): void {
+    messages.value.push(message);
+
+    setTimeout(() => {
+        conversationCnt.value.scrollTo({
+            top: conversationCnt.value.scrollHeight - conversationCnt.value.clientHeight,
+            behavior: 'smooth',
+        });
+    });
+}
 
 function handleDataCardClick() {
     hasSelectedDataSource.value = true;
 
     setTimeout(() => {
-        messages.value.push({
-            id: '6b841887-3d2e-429b-8eb4-ed15240ae44f',
-            content:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt assumenda quibusdam laudantium itaque molestiae tenetur voluptates quas necessitatibus saepe, explicabo nam nobis ad. Sapiente aut exercitationem porro, eligendi nihil labore.',
-            agentType: AgentType.DataGuru,
-            own: false,
+        addMessage({
+            id: 'user-upload-1',
+            content: "I've uploaded property_data.csv and market_trends.xlsx. Please begin the valuation process.",
+            own: true,
+            files: [
+                { id: 'property-data', title: 'property_data.csv' },
+                { id: 'market-trends', title: 'market_trends.xlsx' },
+            ],
         });
 
         setTimeout(() => {
-            messages.value.push({
-                id: '25a03630-9bbb-409a-abb3-bb7a2bc13314',
+            addMessage({
+                id: 'orchestration-to-data-guru',
                 content:
-                    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt assumenda quibusdam laudantium itaque molestiae tenetur voluptates quas necessitatibus saepe, explicabo nam nobis ad. Sapiente aut exercitationem porro, eligendi nihil labore.',
-                agentType: null,
-                own: true,
+                    'Data Guru, the user has provided property_data.csv and market_trends.xlsx. Please ingest and process this data.',
+                agentType: AgentType.Orchestration,
+                own: false,
             });
 
             setTimeout(() => {
-                messages.value.push({
-                    id: 'a812d81e-92c5-4608-99b6-6e5a304db9d5',
+                addMessage({
+                    id: 'data-guru-processed',
                     content:
-                        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt assumenda quibusdam laudantium itaque molestiae tenetur voluptates quas necessitatibus saepe, explicabo nam nobis ad. Sapiente aut exercitationem porro, eligendi nihil labore.',
-                    agentType: AgentType.ModellingChampion,
+                        'Processing complete. The property data contains sales records with features like size, location, and sale date. The market trends data includes regional price indices and interest rates. Data quality seems good, with minimal missing values.',
+                    agentType: AgentType.DataGuru,
                     own: false,
                 });
-            }, 3000);
-        }, 2300);
-    }, 1000);
+
+                setTimeout(() => {
+                    addMessage({
+                        id: 'orchestration-to-modelling',
+                        content:
+                            'Modelling Champion, the processed data is ready. Based on the property sales data (including size, location, sale date) and market trends (regional price indices, interest rates), which valuation model(s) do you recommend?',
+                        agentType: AgentType.Orchestration,
+                        own: false,
+                    });
+
+                    setTimeout(() => {
+                        addMessage({
+                            id: 'modelling-recommendation',
+                            content:
+                                'Considering the temporal nature of the sales data and the influence of market factors, I recommend using a Hedonic Regression model to capture feature-based pricing and a Time Series model (like ARIMA) to account for market trends.',
+                            agentType: AgentType.ModellingChampion,
+                            own: false,
+                        });
+
+                        setTimeout(() => {
+                            addMessage({
+                                id: 'orchestration-to-modelling-run',
+                                content:
+                                    'Proceed with running the Hedonic Regression and ARIMA models on the processed data.',
+                                agentType: AgentType.Orchestration,
+                                own: false,
+                            });
+
+                            setTimeout(() => {
+                                addMessage({
+                                    id: 'modelling-complete',
+                                    content:
+                                        'Valuation complete. Hedonic Regression yielded an estimated value of €350,000 with a standard error of €15,000. The ARIMA model indicates a market appreciation of 3% year-over-year for comparable properties.',
+                                    agentType: AgentType.ModellingChampion,
+                                    own: false,
+                                    links: [
+                                        {
+                                            id: 'link-2-id',
+                                            title: 'Capforce opportunity',
+                                            url: '/path/to/valuation_report.pdf',
+                                        },
+                                    ],
+                                });
+
+                                setTimeout(() => {
+                                    addMessage({
+                                        id: 'orchestration-to-reporting',
+                                        content:
+                                            'Reporting Wizard, the valuation results are in. Please generate a comprehensive report based on the hedonic regression (€350,000 ± €15,000) and the market trend analysis (3% annual appreciation), considering the initial property sales data and market indices.',
+                                        agentType: AgentType.Orchestration,
+                                        own: false,
+                                    });
+
+                                    setTimeout(() => {
+                                        addMessage({
+                                            id: 'reporting-complete',
+                                            content:
+                                                'Report generated. It includes a data summary, methodology explanation (Hedonic Regression and ARIMA), detailed valuation results with confidence intervals, visualizations of price trends, and key insights on market influences.',
+                                            agentType: AgentType.ReportingWizard,
+                                            own: false,
+                                            links: [
+                                                {
+                                                    id: 'link-1-id',
+                                                    title: 'ValuePlus valuation',
+                                                    url: '/path/to/valuation_report.pdf',
+                                                },
+                                            ],
+                                        });
+
+                                        setTimeout(() => {
+                                            addMessage({
+                                                id: 'orchestration-to-user-final',
+                                                content:
+                                                    'The valuation report is ready. The estimated property value is €350,000, with market analysis indicating a 3% annual appreciation trend. You can find the full report here: [link to valuation_report.pdf].',
+                                                agentType: AgentType.Orchestration,
+                                                own: false,
+                                            });
+                                        }, 1800);
+                                    }, 2500);
+                                }, 2200);
+                            }, 1500);
+                        }, 2000);
+                    }, 3000);
+                }, 2300);
+            }, 1000);
+        }, 500);
+    }, 300);
+}
+
+function handleSendBtnClick() {
+    alert('TBD');
 }
 </script>
 
 <template>
     <main class="app-chat">
-        <div class="app-chat__conversation-cnt">
+        <div
+            class="app-chat__conversation-cnt"
+            ref="conversation-cnt"
+        >
             <div
                 class="app-chat__data-source-selector-cnt"
                 v-if="!hasSelectedDataSource"
@@ -100,6 +200,9 @@ function handleDataCardClick() {
                         :key="message.id"
                         :agent-type="message.agentType"
                         :own="message.own"
+                        :content="message.content"
+                        :files="message.files"
+                        :links="message.links"
                     />
                 </TransitionGroup>
             </div>
@@ -120,7 +223,7 @@ function handleDataCardClick() {
                             clickable
                             @click="handleSendBtnClick"
                         >
-                            <app-icon size="small">{{ Icon.Send }}</app-icon>
+                            <app-icon>{{ Icon.Send }}</app-icon>
                         </app-icon-bubble>
                     </div>
                 </div>
@@ -132,23 +235,40 @@ function handleDataCardClick() {
 <style scoped lang="scss">
 .app-chat {
     --chat-height: 150px;
-    --chat-lateral-padding: 400px;
-    --chat-messages-gap: 2rem;
+    --chat-lateral-padding: 350px;
 
-    grid-area: chat;
-    background-color: var(--color-white);
-    border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
+    @media (max-width: var(--breakpoint-small)) {
+        & {
+            --chat-lateral-padding: 50px;
+        }
+    }
 
-    display: grid;
-    grid-template-rows: 1fr var(--chat-height);
-    grid-template-areas:
-        'conversation'
-        'input';
+    @media (max-width: var(--breakpoint-medium)) {
+        & {
+            --chat-lateral-padding: 100px;
+        }
+    }
 
-    overflow: hidden;
+    & {
+        --chat-messages-gap: 2rem;
+        --chat-cnt-padding-bottom: 300px;
+
+        grid-area: chat;
+        background-color: var(--color-white);
+        border-radius: 0px 0px var(--border-radius-medium) var(--border-radius-medium);
+
+        display: grid;
+        grid-template-rows: 1fr var(--chat-height);
+        grid-template-areas:
+            'conversation'
+            'input';
+
+        overflow: hidden;
+    }
 
     &__conversation-cnt {
         overflow-y: auto;
+        padding-bottom: var(--chat-cnt-padding-bottom);
     }
 
     &__conversation-cnt,
@@ -192,8 +312,8 @@ function handleDataCardClick() {
 
     &__data-sources {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        column-gap: var(--gap-medium);
+        grid-template-columns: repeat(3, auto-fit);
+        gap: var(--gap-medium);
     }
 }
 </style>

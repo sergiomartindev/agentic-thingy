@@ -1,10 +1,11 @@
 import AgentType from '../enums/AgentType.enum';
 import Icon from '../enums/Icon.enum';
+import AgentIconBackgroundColor from '../enums/AgentIconBackgroundColor.enum';
 import AgentBackgroundColor from '../enums/AgentBackgroundColor.enum';
 import AgentColor from '../enums/AgentColor.enum';
 import { computed } from 'vue';
 
-export default function (agentType: AgentType) {
+export default function (agentType: AgentType | null) {
     const agentIcon = computed(() => {
         switch (agentType) {
             case AgentType.DataGuru:
@@ -36,6 +37,21 @@ export default function (agentType: AgentType) {
     });
 
     const agentIconBackgroundColor = computed(() => {
+        switch (agentType) {
+            case AgentType.DataGuru:
+                return AgentIconBackgroundColor.DataGuru;
+            case AgentType.ModellingChampion:
+                return AgentIconBackgroundColor.ModellingChampion;
+            case AgentType.ReportingWizard:
+                return AgentIconBackgroundColor.ReportingWizard;
+            case AgentType.Orchestration:
+                return AgentIconBackgroundColor.Orchestration;
+            default:
+                return null;
+        }
+    });
+
+    const agentBackgroundColor = computed(() => {
         switch (agentType) {
             case AgentType.DataGuru:
                 return AgentBackgroundColor.DataGuru;
@@ -84,6 +100,7 @@ export default function (agentType: AgentType) {
         agentIcon,
         agentIconColor,
         agentIconBackgroundColor,
+        agentBackgroundColor,
         agentName,
         agentDescription,
     };

@@ -9,6 +9,8 @@ enum Icon {
     Settings = 'settings',
     Send = 'send',
     Valuation = 'business_center',
+    File = 'description',
+    Link = 'link',
 
     SharePoint = 'smb_share',
     OneDrive = 'cloud',

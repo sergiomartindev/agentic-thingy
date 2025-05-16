@@ -1,8 +1,8 @@
 enum AgentBackgroundColor {
-    DataGuru = '#FFD289',
-    ModellingChampion = '#FFCFB4',
-    ReportingWizard = '#FFCBDA',
-    Orchestration = '#F2CCFF',
+    DataGuru = '#FFD28950',
+    ModellingChampion = '#FFCFB450',
+    ReportingWizard = '#FFCBDA50',
+    Orchestration = '#F2CCFF50',
 }
 
 export default AgentBackgroundColor;

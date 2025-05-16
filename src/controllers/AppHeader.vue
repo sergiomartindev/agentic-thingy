@@ -6,8 +6,6 @@ import AppIconBubble from '../components/AppIconBubble.vue';
 import AppAgentCard from '../components/AppAgentCard.vue';
 import AppIcon from '../components/AppIcon.vue';
 import Icon from '../enums/Icon.enum';
-import AgentBackgroundColor from '../enums/AgentBackgroundColor.enum';
-import AgentColor from '../enums/AgentColor.enum';
 import { useTemplateRef } from 'vue';
 
 const agentsMenu = useTemplateRef('agents-menu');
@@ -45,14 +43,14 @@ function handleAgentsIconBubbleClick() {
                             <app-agent-card :agent-type="AgentType.ReportingWizard" />
                             <app-agent-card :agent-type="AgentType.Orchestration" />
                         </div>
-                        <div class="app-header__agents-menu-actions">
+                        <!-- <div class="app-header__agents-menu-actions">
                             <a
                                 href="#"
                                 class="app-text app-text--highlighted"
                             >
                                 Add more agents
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </md-menu>
             </span>
