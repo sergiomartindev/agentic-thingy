@@ -6,22 +6,23 @@ import AppInput from '../components/AppInput.vue';
 import Icon from '../enums/Icon.enum';
 import AppChatMessage from '../components/AppChatMessage.vue';
 import AppDataCard from '../components/AppDataCard.vue';
+import AppChatTypingMessage from '../components/AppChatTypingMessage.vue';
 import { ref, Ref, useTemplateRef } from 'vue';
 import Message from '../types/Message.type';
-import File from '../types/File.type';
 
 const hasSelectedDataSource: Ref<boolean> = ref(false);
 const messages: Ref<Message[]> = ref([]);
 const conversationCnt = useTemplateRef('conversation-cnt');
+const agentTyping: Ref<AgentType | null> = ref(null);
 
 function addMessage(message: Message): void {
     messages.value.push(message);
 
-    setTimeout(() => {
-        conversationCnt.value.scrollTo({
-            top: conversationCnt.value.scrollHeight - conversationCnt.value.clientHeight,
-            behavior: 'smooth',
-        });
+    // @ts-ignore
+    conversationCnt.value.scrollTo({
+        // @ts-ignore
+        top: conversationCnt.value.scrollHeight - conversationCnt.value.clientHeight,
+        behavior: 'smooth',
     });
 }
 
@@ -29,6 +30,8 @@ function handleDataCardClick() {
     hasSelectedDataSource.value = true;
 
     setTimeout(() => {
+        agentTyping.value = null;
+
         addMessage({
             id: 'user-upload-1',
             content: "I've uploaded property_data.csv and market_trends.xlsx. Please begin the valuation process.",
@@ -40,109 +43,158 @@ function handleDataCardClick() {
         });
 
         setTimeout(() => {
-            addMessage({
-                id: 'orchestration-to-data-guru',
-                content:
-                    'Data Guru, the user has provided property_data.csv and market_trends.xlsx. Please ingest and process this data.',
-                agentType: AgentType.Orchestration,
-                own: false,
-            });
+            agentTyping.value = AgentType.Orchestration;
 
             setTimeout(() => {
+                agentTyping.value = null;
+
                 addMessage({
-                    id: 'data-guru-processed',
+                    id: 'orchestration-to-data-guru',
                     content:
-                        'Processing complete. The property data contains sales records with features like size, location, and sale date. The market trends data includes regional price indices and interest rates. Data quality seems good, with minimal missing values.',
-                    agentType: AgentType.DataGuru,
+                        'Data Guru, the user has provided property_data.csv and market_trends.xlsx. Please ingest and process this data.',
+                    agentType: AgentType.Orchestration,
                     own: false,
                 });
 
                 setTimeout(() => {
-                    addMessage({
-                        id: 'orchestration-to-modelling',
-                        content:
-                            'Modelling Champion, the processed data is ready. Based on the property sales data (including size, location, sale date) and market trends (regional price indices, interest rates), which valuation model(s) do you recommend?',
-                        agentType: AgentType.Orchestration,
-                        own: false,
-                    });
+                    agentTyping.value = AgentType.DataGuru;
 
                     setTimeout(() => {
+                        agentTyping.value = null;
+
                         addMessage({
-                            id: 'modelling-recommendation',
+                            id: 'data-guru-processed',
                             content:
-                                'Considering the temporal nature of the sales data and the influence of market factors, I recommend using a Hedonic Regression model to capture feature-based pricing and a Time Series model (like ARIMA) to account for market trends.',
-                            agentType: AgentType.ModellingChampion,
+                                'Processing complete. The property data contains sales records with features like size, location, and sale date. The market trends data includes regional price indices and interest rates. Data quality seems good, with minimal missing values.',
+                            agentType: AgentType.DataGuru,
                             own: false,
                         });
 
                         setTimeout(() => {
-                            addMessage({
-                                id: 'orchestration-to-modelling-run',
-                                content:
-                                    'Proceed with running the Hedonic Regression and ARIMA models on the processed data.',
-                                agentType: AgentType.Orchestration,
-                                own: false,
-                            });
+                            agentTyping.value = AgentType.Orchestration;
 
                             setTimeout(() => {
+                                agentTyping.value = null;
+
                                 addMessage({
-                                    id: 'modelling-complete',
+                                    id: 'orchestration-to-modelling',
                                     content:
-                                        'Valuation complete. Hedonic Regression yielded an estimated value of €350,000 with a standard error of €15,000. The ARIMA model indicates a market appreciation of 3% year-over-year for comparable properties.',
-                                    agentType: AgentType.ModellingChampion,
+                                        'Modelling Champion, the processed data is ready. Based on the property sales data (including size, location, sale date) and market trends (regional price indices, interest rates), which valuation model(s) do you recommend?',
+                                    agentType: AgentType.Orchestration,
                                     own: false,
-                                    links: [
-                                        {
-                                            id: 'link-2-id',
-                                            title: 'Capforce opportunity',
-                                            url: '/path/to/valuation_report.pdf',
-                                        },
-                                    ],
                                 });
 
                                 setTimeout(() => {
-                                    addMessage({
-                                        id: 'orchestration-to-reporting',
-                                        content:
-                                            'Reporting Wizard, the valuation results are in. Please generate a comprehensive report based on the hedonic regression (€350,000 ± €15,000) and the market trend analysis (3% annual appreciation), considering the initial property sales data and market indices.',
-                                        agentType: AgentType.Orchestration,
-                                        own: false,
-                                    });
+                                    agentTyping.value = AgentType.ModellingChampion;
 
                                     setTimeout(() => {
+                                        agentTyping.value = null;
+
                                         addMessage({
-                                            id: 'reporting-complete',
+                                            id: 'modelling-recommendation',
                                             content:
-                                                'Report generated. It includes a data summary, methodology explanation (Hedonic Regression and ARIMA), detailed valuation results with confidence intervals, visualizations of price trends, and key insights on market influences.',
-                                            agentType: AgentType.ReportingWizard,
+                                                'Considering the temporal nature of the sales data and the influence of market factors, I recommend using a Hedonic Regression model to capture feature-based pricing and a Time Series model (like ARIMA) to account for market trends.',
+                                            agentType: AgentType.ModellingChampion,
                                             own: false,
                                             links: [
                                                 {
-                                                    id: 'link-1-id',
-                                                    title: 'ValuePlus valuation',
+                                                    id: 'link-2-id',
+                                                    title: 'Capforce opportunity',
                                                     url: '/path/to/valuation_report.pdf',
                                                 },
                                             ],
                                         });
 
                                         setTimeout(() => {
-                                            addMessage({
-                                                id: 'orchestration-to-user-final',
-                                                content:
-                                                    'The valuation report is ready. The estimated property value is €350,000, with market analysis indicating a 3% annual appreciation trend. You can find the full report here: [link to valuation_report.pdf].',
-                                                agentType: AgentType.Orchestration,
-                                                own: false,
-                                            });
-                                        }, 1800);
-                                    }, 2500);
-                                }, 2200);
-                            }, 1500);
-                        }, 2000);
-                    }, 3000);
-                }, 2300);
-            }, 1000);
-        }, 500);
-    }, 300);
+                                            agentTyping.value = AgentType.Orchestration;
+
+                                            setTimeout(() => {
+                                                agentTyping.value = null;
+                                                addMessage({
+                                                    id: 'orchestration-to-modelling-run',
+                                                    content:
+                                                        'Proceed with running the Hedonic Regression and ARIMA models on the processed data.',
+                                                    agentType: AgentType.Orchestration,
+                                                    own: false,
+                                                });
+
+                                                setTimeout(() => {
+                                                    agentTyping.value = AgentType.ModellingChampion;
+                                                    setTimeout(() => {
+                                                        agentTyping.value = null;
+                                                        addMessage({
+                                                            id: 'modelling-complete',
+                                                            content:
+                                                                'Valuation complete. Hedonic Regression yielded an estimated value of €350,000 with a standard error of €15,000. The ARIMA model indicates a market appreciation of 3% year-over-year for comparable properties.',
+                                                            agentType: AgentType.ModellingChampion,
+                                                            own: false,
+                                                        });
+
+                                                        setTimeout(() => {
+                                                            agentTyping.value = AgentType.Orchestration;
+                                                            setTimeout(() => {
+                                                                agentTyping.value = null;
+                                                                addMessage({
+                                                                    id: 'orchestration-to-reporting',
+                                                                    content:
+                                                                        'Reporting Wizard, the valuation results are in. Please generate a comprehensive report based on the hedonic regression (€350,000 ± €15,000) and the market trend analysis (3% annual appreciation), considering the initial property sales data and market indices.',
+                                                                    agentType: AgentType.Orchestration,
+                                                                    own: false,
+                                                                });
+
+                                                                setTimeout(() => {
+                                                                    agentTyping.value = AgentType.ReportingWizard;
+                                                                    setTimeout(() => {
+                                                                        agentTyping.value = null;
+                                                                        addMessage({
+                                                                            id: 'reporting-complete',
+                                                                            content:
+                                                                                'Report generated. It includes a data summary, methodology explanation (Hedonic Regression and ARIMA), detailed valuation results with confidence intervals, visualizations of price trends, and key insights on market influences.',
+                                                                            agentType: AgentType.ReportingWizard,
+                                                                            own: false,
+                                                                            links: [
+                                                                                {
+                                                                                    id: 'link-1-id',
+                                                                                    title: 'ValuePlus valuation',
+                                                                                    url: '/path/to/valuation_report.pdf',
+                                                                                },
+                                                                            ],
+                                                                        });
+
+                                                                        setTimeout(() => {
+                                                                            agentTyping.value = AgentType.Orchestration;
+                                                                            setTimeout(() => {
+                                                                                agentTyping.value = null;
+
+                                                                                addMessage({
+                                                                                    id: 'orchestration-to-user-final',
+                                                                                    content:
+                                                                                        'The valuation report is ready. The estimated property value is €350,000, with market analysis indicating a 3% annual appreciation trend. You can find the full report here: [link to valuation_report.pdf].',
+                                                                                    agentType: AgentType.Orchestration,
+                                                                                    own: false,
+                                                                                });
+
+                                                                                agentTyping.value =
+                                                                                    AgentType.Orchestration;
+                                                                            }, 1800);
+                                                                        }, 300);
+                                                                    }, 1200);
+                                                                }, 300);
+                                                            }, 2000);
+                                                        }, 300);
+                                                    }, 2300);
+                                                }, 300);
+                                            }, 1600);
+                                        }, 300);
+                                    }, 800);
+                                }, 300);
+                            }, 2500);
+                        }, 300);
+                    }, 1500);
+                }, 300);
+            }, 2500);
+        }, 300);
+    }, 200);
 }
 
 function handleSendBtnClick() {
@@ -205,6 +257,11 @@ function handleSendBtnClick() {
                         :links="message.links"
                     />
                 </TransitionGroup>
+
+                <app-chat-typing-message
+                    v-if="agentTyping"
+                    :agent-type="agentTyping"
+                />
             </div>
         </div>
 
