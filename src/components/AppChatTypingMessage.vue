@@ -19,6 +19,7 @@ const { agentIcon, agentIconColor, agentIconBackgroundColor, agentName, agentDes
                 class="app-chat-typing-message__loader"
                 :style="`--agent-color: ${agentIconBackgroundColor}`"
             />
+
             <app-icon-bubble :style="{ 'background-color': agentIconBackgroundColor }">
                 <app-icon :style="{ color: agentIconColor }">{{ agentIcon }}</app-icon>
             </app-icon-bubble>

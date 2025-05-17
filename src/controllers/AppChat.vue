@@ -93,16 +93,9 @@ function handleDataCardClick() {
                                         addMessage({
                                             id: 'modelling-recommendation',
                                             content:
-                                                'Considering the temporal nature of the sales data and the influence of market factors, I recommend using a Hedonic Regression model to capture feature-based pricing and a Time Series model (like ARIMA) to account for market trends.',
+                                                'Considering the temporal nature of the sales data and the influence of market factors, I recommend using a DCF model to capture feature-based pricing and a Time Series model (like ARIMA) to account for market trends.',
                                             agentType: AgentType.ModellingChampion,
                                             own: false,
-                                            links: [
-                                                {
-                                                    id: 'link-2-id',
-                                                    title: 'Capforce opportunity',
-                                                    url: '/path/to/valuation_report.pdf',
-                                                },
-                                            ],
                                         });
 
                                         setTimeout(() => {
@@ -113,7 +106,7 @@ function handleDataCardClick() {
                                                 addMessage({
                                                     id: 'orchestration-to-modelling-run',
                                                     content:
-                                                        'Proceed with running the Hedonic Regression and ARIMA models on the processed data.',
+                                                        'Proceed with running the DCF models on the processed data.',
                                                     agentType: AgentType.Orchestration,
                                                     own: false,
                                                 });
@@ -125,7 +118,7 @@ function handleDataCardClick() {
                                                         addMessage({
                                                             id: 'modelling-complete',
                                                             content:
-                                                                'Valuation complete. Hedonic Regression yielded an estimated value of €350,000 with a standard error of €15,000. The ARIMA model indicates a market appreciation of 3% year-over-year for comparable properties.',
+                                                                'Valuation complete. DCF valuation yielded an estimated value of €350,000 with a standard error of €15,000. The ARIMA model indicates a market appreciation of 3% year-over-year for comparable properties.',
                                                             agentType: AgentType.ModellingChampion,
                                                             own: false,
                                                         });
@@ -137,7 +130,7 @@ function handleDataCardClick() {
                                                                 addMessage({
                                                                     id: 'orchestration-to-reporting',
                                                                     content:
-                                                                        'Reporting Wizard, the valuation results are in. Please generate a comprehensive report based on the hedonic regression (€350,000 ± €15,000) and the market trend analysis (3% annual appreciation), considering the initial property sales data and market indices.',
+                                                                        'Reporting Wizard, the valuation results are in. Please generate a comprehensive report based on the DCF (€350,000 ± €15,000) and the market trend analysis (3% annual appreciation), considering the initial property sales data and market indices.',
                                                                     agentType: AgentType.Orchestration,
                                                                     own: false,
                                                                 });
@@ -149,7 +142,7 @@ function handleDataCardClick() {
                                                                         addMessage({
                                                                             id: 'reporting-complete',
                                                                             content:
-                                                                                'Report generated. It includes a data summary, methodology explanation (Hedonic Regression and ARIMA), detailed valuation results with confidence intervals, visualizations of price trends, and key insights on market influences.',
+                                                                                'Report generated. It includes a data summary, methodology explanation (DCF and ARIMA), detailed valuation results with confidence intervals, visualizations of price trends, and key insights on market influences.',
                                                                             agentType: AgentType.ReportingWizard,
                                                                             own: false,
                                                                             links: [
@@ -169,29 +162,35 @@ function handleDataCardClick() {
                                                                                 addMessage({
                                                                                     id: 'orchestration-to-user-final',
                                                                                     content:
-                                                                                        'The valuation report is ready. The estimated property value is €350,000, with market analysis indicating a 3% annual appreciation trend. You can find the full report here: [link to valuation_report.pdf].',
+                                                                                        'The valuation report is ready. The estimated property value is €350,000, with market analysis indicating a 3% annual appreciation trend. You can find the full report here: ',
                                                                                     agentType: AgentType.Orchestration,
                                                                                     own: false,
+                                                                                    files: [
+                                                                                        {
+                                                                                            id: 'valuation-report',
+                                                                                            title: 'valuation_report.pdf',
+                                                                                        },
+                                                                                    ],
                                                                                 });
-                                                                            }, 1800);
-                                                                        }, 300);
-                                                                    }, 1200);
-                                                                }, 300);
-                                                            }, 2000);
-                                                        }, 300);
-                                                    }, 2300);
-                                                }, 300);
-                                            }, 1600);
-                                        }, 300);
-                                    }, 800);
-                                }, 300);
-                            }, 2500);
-                        }, 300);
-                    }, 1500);
-                }, 300);
-            }, 2500);
-        }, 300);
-    }, 200);
+                                                                            }, 4800);
+                                                                        }, 100);
+                                                                    }, 2200);
+                                                                }, 100);
+                                                            }, 4000);
+                                                        }, 100);
+                                                    }, 3300);
+                                                }, 100);
+                                            }, 2600);
+                                        }, 100);
+                                    }, 1800);
+                                }, 100);
+                            }, 3500);
+                        }, 100);
+                    }, 2500);
+                }, 100);
+            }, 3600);
+        }, 100);
+    }, 0);
 }
 
 function handleSendBtnClick() {
@@ -289,7 +288,7 @@ function handleSendBtnClick() {
 <style scoped lang="scss">
 .app-chat {
     --chat-height: 150px;
-    --chat-lateral-padding: 350px;
+    --chat-lateral-padding: 15%;
 
     @media (max-width: var(--breakpoint-small)) {
         & {
